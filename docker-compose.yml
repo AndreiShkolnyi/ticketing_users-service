@@ -1,0 +1,20 @@
+services:
+  users-service:
+    container_name: users-service
+    image: ticketing/users-service:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env.production.local
+    expose:
+      - '9101'
+    volumes:
+      - ../logs/users:/var/log/services/users
+    networks:
+      - choncinema
+
+networks:
+  choncinema:
+      external: true
