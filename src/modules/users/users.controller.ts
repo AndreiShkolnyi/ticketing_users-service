@@ -1,0 +1,34 @@
+import type {
+	CreateUserRequest,
+	CreateUserResponse,
+	GetMeRequest,
+	GetMeResponse,
+	PatchUserRequest,
+	PatchUserResponse
+} from '@choncinema/contracts/gen/ts/users'
+import { Controller } from '@nestjs/common'
+import { GrpcMethod } from '@nestjs/microservices'
+
+import { UsersService } from './users.service'
+
+@Controller()
+export class UsersController {
+	constructor(private readonly usersService: UsersService) {}
+
+	@GrpcMethod('UsersService', 'GetMe')
+	public async getMe(data: GetMeRequest): Promise<GetMeResponse> {
+		return await this.usersService.getMe(data)
+	}
+
+	@GrpcMethod('UsersService', 'CreateUser')
+	public async create(data: CreateUserRequest): Promise<CreateUserResponse> {
+		return this.usersService.create(data)
+	}
+
+	@GrpcMethod('UsersService', 'PatchUser')
+	public async updateUser(
+		data: PatchUserRequest
+	): Promise<PatchUserResponse> {
+		return this.usersService.update(data)
+	}
+}
